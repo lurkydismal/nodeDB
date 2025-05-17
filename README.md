@@ -2,12 +2,10 @@
 <!-- :toc-title: -->
 <!-- :toclevels: 99 -->
 
-# bookish-octo-waddle <!-- omit from toc -->
+# nodeDB <!-- omit from toc -->
 
-<!-- Codacy bagde -->
-
-> Outline a brief description of your project.
-> Live demo [_here_](https://www.example.com). <!-- If you have the project hosted somewhere, include the link here. -->
+> A visual node-based editor for building and composing PostgreSQL queries dynamically.
+> Live demo [_here_](https://lurkydismal.github.io/nodeDB).
 
 ## Table of Contents <!-- omit from toc -->
 
@@ -25,80 +23,87 @@
 
 ## General Information
 
-* Provide general information about your project here.
-* What problem does it (intend to) solve?
-* What is the purpose of your project?
-* Why did you undertake it?
-<!-- You don't have to answer all the questions - just the ones relevant to your project. -->
+nodeDB is a browser‑based, drag‑and‑drop node editor that generates PostgreSQL queries without typing SQL by hand. It solves the problem of constructing complex queries visually and exporting them for execution. Currently focused on PostgreSQL export, with MongoDB export planned for the future. Queries and node layouts are saved to and restored from browser storage, so you never lose your work.
 
 ## Technologies Used
 
-* Tech 1 - version 1.0
-* Tech 2 - version 2.0
-* Tech 3 - version 3.0
+* Drawflow — v0.0.60
+* SweetAlert2 — v11
+* Vanilla JavaScript, HTML, and CSS
+* Browser Local Storage API
 
 ## Features
 
-List the ready features here:
-
-* Awesome feature 1
-* Awesome feature 2
-* Awesome feature 3
+* Build queries by connecting nodes representing SQL clauses ( SELECT, FROM, WHERE, GROUP BY, etc. )
+* Save and restore your node graph in browser storage
+* One‑click export of composed query to a .sql text blob via the “Export” button
+* Customizable node definitions — add new node types by editing the nodes array in index.html
+* Lightweight, no build step or server required — just open index.html in your browser
 
 ## Screenshots
 
-![Example screenshot](./img/screenshot.png)
-<!-- If you have screenshots you'd like to share, include them here. -->
+![Example screenshot](./img/screenshot_1.png)
+![Another example screenshot](./img/screenshot_2.png)
 
 ## Setup
 
-What are the project requirements/dependencies? Where are they listed?
-A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
+No build or installation is required:
 
-Proceed to describe how to
-install / setup one's local environment / get started with the project.
+1. Clone the repo
+    ```bash
+    git clone https://github.com/lurkydismal/nodeDB.git
+    ```
+
+1. Open index.html in your favorite browser ( tested on Firefox 138.0.3 ).
+    That’s it — everything runs client‑side.
 
 ## Usage
 
-How does one go about using it?
-Provide various use cases and code examples here.
+1. Edit or extend the nodes array in index.js to add new node types. Example node:
+    ```js
+    {
+      name: "group_by",        // will also define a CSS class for styling
+      label: "Group By",       // displayed in the node header
+      io: [1, 1],              // one input, one output
+      data: { keyForInput: "", groups: "" },
+      psql: "GROUP BY $groups\n",
+      input: ["Label", "keyForInput"],      // single-line text field
+      textarea: ["Groups", "groups"],       // multi-line textarea
+      select: [
+          "Select something", "keyInData",
+          [
+              [ "Option label", "option_value" ],
+              [ "Another option label", "another_option_value" ]
+          ]
+      ], // select list
+    }
+    ```
 
-`write-your-code-here`
+1. Drag nodes onto the canvas, fill in parameters, and connect edges.
+1. Click Export ( top-right ) to generate the final SQL query. A SweetAlert2 modal will display your assembled query, preserving newlines.
+1. Copy the SQL and run it in psql or your preferred client.
 
 ## Project Status
 
-Project is: _in progress_ / _complete_ / _no longer being worked on_.
-If you are no longer working on it, provide reasons why.
+Project is in progress. Core PostgreSQL node editor functionality is complete; MongoDB export and additional node types are planned next.
 
 ## Room for Improvement
 
-Include areas you believe
-need improvement / could be improved.
-Also add TODOs for future development.
-
-Room for improvement:
-
-* Improvement to be done 1
-* Improvement to be done 2
-
 To do:
 
-* Feature to be added 1
-* Feature to be added 2
+* Implement MongoDB query export based on the same node graph
+* Add more node types ( e.g., LEFT JOIN, HAVING, LIMIT )
 
 ## Acknowledgements
 
-Give credit here.
-
-* This project was inspired by...
-* This project was based on [this tutorial](https://www.example.com/).
-* Many thanks to...
+* Inspired by the [_Drawflow demo_](https://github.com/jerosoler/Drawflow/blob/master/docs/index.html).
+* SweetAlert2 for lightweight, customizable modals
 
 ## Contact
 
-Created by [@example](https://example.com/) - feel free to contact me!
+Created by [@lurkydismal](https://github.com/lurkydismal) - feel free to contact me!
 
 ## License
 
 This project is open source and available under the
-[GNU Affero General Public License v3.0](https://github.com/lurkydismal/bookish-octo-waddle/blob/main/LICENSE).
+[GNU Affero General Public License v3.0](https://github.com/lurkydismal/nodeDB/blob/main/LICENSE).

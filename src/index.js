@@ -167,7 +167,7 @@ function addNodeToDrawFlow( name, screenX, screenY ) {
 
                 select.setAttribute( "df-" + node.select[ 1 ], "" );
 
-                for ( const [ text, value ] of node.select[ 3 ] ) {
+                for ( const [ text, value ] of node.select[ 2 ] ) {
                     const option = document.createElement( "option" );
 
                     option.innerText = text;
