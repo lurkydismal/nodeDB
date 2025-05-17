@@ -126,9 +126,10 @@
                 name: "order_by",
                 label: "Order By",
                 io: [1, 1],
-                data: { expression : "" },
-                psql: "ORDER BY $expression\n",
-                textarea: [ "Expression", "expression" ]
+                data: { row : "", sort_order : "" },
+                psql: "ORDER BY $row $sort_order\n",
+                textarea: [ "Row", "row" ],
+                select: [ "Sort Order", "sort_order", [ [ "Descending", "DESC" ], [ "Ascending", "ASC" ] ] ]
             },
             {
                 name: "update",
