@@ -59,14 +59,14 @@ No build or installation is required:
 
 ## Usage
 
-1. Edit or extend the nodes array in index.js to add new node types. Example node:
+1. Edit or extend the nodes array in index.html to add new node types. Example node:
     ```js
     {
       name: "group_by",        // will also define a CSS class for styling
       label: "Group By",       // displayed in the node header
       io: [1, 1],              // one input, one output
       data: { keyForInput: "", groups: "" },
-      psql: "GROUP BY $groups\n",
+      psql: "GROUP BY $groups\n",           // will be interpolated with value from data at export time
       input: ["Label", "keyForInput"],      // single-line text field
       textarea: ["Groups", "groups"],       // multi-line textarea
       select: [
