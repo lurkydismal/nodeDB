@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node DB</title>
+
+    <script src="../lib/drawflow.min.js"></script>
+
+    <link rel="stylesheet" href="../lib/drawflow.min.css">
+    <link rel="stylesheet" href="index.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@latest"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="col" id="nodesToUse">
+        </div>
+
+        <div class="col-right">
+            <div id="drawflow" ondrop="drop(event)"
+                ondragover="allowDrop(event)">
+                <div class="btn-export" onclick="exportPSQL()">Export</div>
+                <div class="btn-clear" onclick="editor.clearModuleSelected()">Clear</div>
+                <div class="btn-load" onclick="load()">Load</div>
+                <div class="btn-save" onclick="save()">Save</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const nodes = [
+            // ————— Abstract DB nodes —————
+            {
+                name: "begin",
+                label: "Begin",
+                io: [0, 1],
+                data: {},
+                psql: "\n"
+            },
+            {
+                name: "end",
+                label: "End",
+                io: [1, 0],
+                data: {},
+                psql: ";\n"
+            },
+
+            // ————— Generic DB nodes —————
+            {
+                name: "group_by",
+                label: "Group By",
+                io: [1, 1],
+                data: { groups : "" },
+                psql: "GROUP BY $groups\n",
+                textarea : [ "Groups", "groups" ]
+            },
+            {
+                name: "count",
+                label: "Count",
+                io: [1, 1],
+                data: { row : "" },
+                psql: "COUNT ($row)\n",
+                input: [ "Row", "row" ]
+            },
+            {
+                name: "sum",
+                label: "Sum",
+                io: [1, 1],
+                data: { expression : "" },
+                psql: "SUM ($expression)\n",
+                textarea: [ "Expression", "expression" ]
+            },
+            {
+                name: "delete_from",
+                label: "Delete From",
+                io: [1, 1],
+                data: { table : "" },
+                psql: "DELETE FROM $table\n",
+                input: [ "Table", "table" ]
+            },
+            {
+                name: "where",
+                label: "Where",
+                io: [1, 1],
+                data: { condition : "" },
+                psql: "WHERE $condition\n",
+                input: [ "Condition", "condition" ]
+            },
+            {
+                name: "insert_into",
+                label: "Insert Into",
+                io: [1, 1],
+                data: { expression : "" },
+                psql: "INSERT INTO $expression\n",
+                textarea: [ "Expression", "expression" ]
+            },
+            {
+                name: "inner_join",
+                label: "Inner Join",
+                io: [1, 1],
+                data: { table : "" },
+                psql: "INNER JOIN $table\n",
+                input: [ "Table", "table" ]
+            },
+            {
+                name: "on",
+                label: "On",
+                io: [1, 1],
+                data: { expression : "" },
+                psql: "ON $expression\n",
+                textarea : [ "Expression", "expression" ]
+            },
+            {
+                name: "select",
+                label: "Select",
+                io: [1, 1],
+                data: { expression : "" },
+                psql: "SELECT $expression\n",
+                textarea: [ "Expression", "expression" ]
+            },
+            {
+                name: "order_by",
+                label: "Order By",
+                io: [1, 1],
+                data: { expression : "" },
+                psql: "ORDER BY $expression\n",
+                textarea: [ "Expression", "expression" ]
+            },
+            {
+                name: "update",
+                label: "Update",
+                io: [1, 1],
+                data: { table : "" },
+                psql: "UPDATE $table\n",
+                input: [ "Table", "table" ]
+            },
+            {
+                name: "from",
+                label: "From",
+                io: [1, 1],
+                data: { table : "" },
+                psql: "FROM $table\n",
+                input: [ "Table", "table" ]
+            },
+            {
+                name: "values",
+                label: "Values",
+                io: [1, 1],
+                data: { expression : "" },
+                psql: "VALUES $expression\n",
+                textarea: [ "Expression", "expression" ]
+            },
+        ];
+    </script>
+
+    <script src="index.js"></script>
+
+    <script>
+        const fragment = document.createDocumentFragment();
+
+        for (const { label, name } of nodes) {
+            const element = document.createElement("div");
+
+            // Properties
+            {
+                element.className = "drag-drawflow";
+                element.draggable = true;
+                element.dataset.node = name;
+                element.ondragstart = drag;
+            }
+
+            const span = document.createElement("span");
+
+            // Properties
+            {
+                span.textContent = label;
+            }
+
+            element.appendChild(span);
+
+            fragment.appendChild(element);
+        }
+
+        document.getElementById( "nodesToUse" ).appendChild( fragment );
+    </script>
+</body>
+
+</html>
