@@ -194,7 +194,20 @@ function addNodeToDrawFlow( name, screenX, screenY ) {
 }
 
 function load() {
-    window.editor.import( JSON.parse( localStorage.getItem( "Home" ) ) );
+    const storedDrawflow = localStorage.getItem( "Home" );
+
+    if ( ( typeof storedDrawflow === "undefined" ) || ( !storedDrawflow ) ) {
+        return;
+    }
+
+    try {
+        const testObject = JSON.parse( storedDrawflow );
+
+    } catch {
+        return;
+    }
+
+    window.editor.import( JSON.parse( storedDrawflow ) );
 }
 
 function save() {
@@ -250,7 +263,7 @@ function exportPSQL() {
     Swal.fire( {
         background : "#2a2a2a",
         color : "#ffffff",
-        html : psql.replace(/\n/g, "<br>"),
+        html : psql.replace( /\n/g, "<br>" ),
         title : "Postgresql query",
     } );
 }
