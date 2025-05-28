@@ -207,6 +207,8 @@ function load() {
         return;
     }
 
+    console.info( storedDrawflow );
+
     window.editor.import( JSON.parse( storedDrawflow ) );
 }
 
